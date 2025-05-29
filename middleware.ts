@@ -1,16 +1,21 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 
-const isPublicRoute = createRouteMatcher([
-  '/sign-in(.*)',
-  '/sign-up(.*)'
-])
+const isPublicRoute = createRouteMatcher(['/sign-in(.*)'])
 
 export default clerkMiddleware(async (auth, req) => {
-  if (!isPublicRoute(req)) {
+const { nextUrl } = req;
+
+// Skip authentication for API routes that handle their own auth
+if (nextUrl.pathname.startsWith('/api/uploadthing') ||
+    nextUrl.pathname.startsWith('/api/groups')) {
+    return;
+}
+
+if (!isPublicRoute(req)) {
     await auth.protect()
-  }
-  publicRoutes: ["/api/uploadthing"]
+}
 })
+
 
 export const config = {
   matcher: [

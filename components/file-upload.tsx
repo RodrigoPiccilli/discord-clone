@@ -7,6 +7,7 @@ import Image from "next/image"
 import { UploadDropzone } from "@/lib/uploadthing";
 
 import "@uploadthing/react/styles.css"
+import { endpointClientChangedSubscribe } from "next/dist/build/swc/generated-native";
 
 interface FileUploadProps {
     onChange: (url?:string) => void;
@@ -25,8 +26,7 @@ export const FileUpload = ({
     if(value && fileType !== "pdf") {
         return (
             <div className="relative h-20 w-20">
-
-                <Image 
+                <Image
                     fill
                     src={value}
                     alt="Upload"
@@ -34,10 +34,8 @@ export const FileUpload = ({
                 />
                 <button
                     onClick={() => onChange("")}
-                    className="bg-rose-500 text-white p-1
-                    rounded-fill absolute top-0 right-0 shadow-sm "
-                    type="button"
-                >
+                    className="bg-rose-500 text-white p-1 rounded-full absolute top-0 right-0 shadow-sm"
+                    type="button">
                     <X className="h-4 w-4"/>
                 </button>
             </div>
@@ -45,15 +43,19 @@ export const FileUpload = ({
     }
 
     return (
-        <UploadDropzone
-            endpoint={endpoint}
-            onClientUploadComplete={(res) => {
-                onChange(res?.[0].url) ;
-            }}
-            onUploadError={(error: Error) => {
-                console.log(error)
-            }}
-        ></UploadDropzone>
+    <UploadDropzone
+        endpoint={endpoint}
+        onClientUploadComplete={(res) => {
+            onChange(res?.[0].url)
+        }}
+        onUploadError={(error: Error) => {
+            console.log(error);
+        }}
+        
+    />
     )
 
+  
+
+           
 }
